@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CategoryCard } from '../components/CategoryCard';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -37,31 +37,40 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
 
   return (
     <View style={styles.container}>
-      {/* Title top-left */}
-      <View style={styles.header}>
-        <Text style={styles.title}>MY HOUSE</Text>
-      </View>
-
-      {/* Centered Grid Area */}
-      <View style={styles.gridWrapper}>
-        <View style={styles.grid}>
-          {categories.map((item) => (
-            <CategoryCard
-              key={item.id}
-              label={item.label}
-              onPress={() => handlePress(item.screen)}
-            />
-          ))}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Title top-left */}
+        <View style={styles.header}>
+          <Text style={styles.title}>MY HOUSE</Text>
         </View>
-      </View>
+
+        {/* Centered Grid Area */}
+        <View style={styles.gridWrapper}>
+          <View style={styles.grid}>
+            {categories.map((item) => (
+              <CategoryCard
+                key={item.id}
+                label={item.label}
+                onPress={() => handlePress(item.screen)}
+              />
+            ))}
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: Platform.OS === 'web' ? undefined : 1,
+  },
+  scrollContent: {
     paddingHorizontal: 40,
+    paddingBottom: 150, // Garante espaço para o chat
+    flexGrow: 1,
   },
   header: {
     paddingTop: 20,

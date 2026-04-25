@@ -4,7 +4,7 @@ import Animated, {
   FadeIn,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 import { Colors } from '../theme/colors';
 
@@ -22,25 +22,30 @@ export function AutomationCard({ label, index, onPress }: AutomationCardProps) {
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: withSpring(scale.value, { damping: 15, stiffness: 200 }) }],
+    transform: [{ scale: withTiming(scale.value, { duration: 250 }) }],
+    zIndex: scale.value > 1 ? 10 : 1,
   }));
 
   return (
-    <Pressable
-      onPressIn={() => { scale.value = 0.92; }}
-      onPressOut={() => { scale.value = 1; }}
-      onPress={onPress}
-      style={styles.pressable}
-    >
-      <Animated.View
-        entering={FadeIn.delay(index * 30).duration(300)}
-        style={[styles.card, animatedStyle]}
+    <View style={styles.pressable}>
+      <Pressable
+        onHoverIn={() => { scale.value = 1.08; }}
+        onHoverOut={() => { scale.value = 1; }}
+        onPressIn={() => { scale.value = 0.92; }}
+        onPressOut={() => { scale.value = 1; }}
+        onPress={onPress}
+        style={styles.cardWrapper}
       >
-        <Text style={styles.label} numberOfLines={1}>
-          {label}
-        </Text>
-      </Animated.View>
-    </Pressable>
+        <Animated.View
+          entering={FadeIn.delay(index * 30).duration(300)}
+          style={[styles.card, animatedStyle]}
+        >
+          <Text style={styles.label} numberOfLines={1}>
+            {label}
+          </Text>
+        </Animated.View>
+      </Pressable>
+    </View>
   );
 }
 
@@ -48,10 +53,12 @@ export function AutomationCard({ label, index, onPress }: AutomationCardProps) {
 export function AutomationCardSkeleton({ index }: { index: number }) {
   return (
     <View style={styles.pressable}>
-      <Animated.View
-        entering={FadeIn.delay(index * 20).duration(200)}
-        style={[styles.card, styles.skeleton]}
-      />
+      <View style={[styles.card, styles.cardWrapper, styles.skeleton]}>
+        <Animated.View
+          entering={FadeIn.delay(index * 20).duration(200)}
+          style={{ flex: 1 }}
+        />
+      </View>
     </View>
   );
 }
@@ -62,6 +69,9 @@ const styles = StyleSheet.create({
     maxWidth: '12.5%', // 100% / 8 columns
     aspectRatio: 1.1,
     padding: 4,
+  },
+  cardWrapper: {
+    flex: 1,
   },
   card: {
     flex: 1,

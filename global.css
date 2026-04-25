@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Enable native web scrolling for the root elements */
+html, body, #root {
+  min-height: 100vh; /* Cresce com o conteúdo */
+  min-height: 100dvh; /* Bônus: lida perfeitamente com a barra de endereço em celulares */
+  margin: 0;
+  padding: 0;
+  background-color: #3B006D;
+  
+  /* Gradiente direto no body */
+  background-image: linear-gradient(
+    135deg, 
+    #4B0082 0%, 
+    #3B006D 30%, 
+    #4A6CF7 70%, 
+    #6B8AFF 100%
+  );
+  background-attachment: fixed; /* O segredo mágico: crava o fundo na tela durante o scroll */
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* Scroll seguro para Web */
+html, body {
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
+
+/* Disable default browser focus indicators for a clean UI */
+*:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}

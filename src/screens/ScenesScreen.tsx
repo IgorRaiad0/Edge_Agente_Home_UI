@@ -8,16 +8,16 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { AutomationEntityCard } from '../components/AutomationEntityCard';
+import { SceneCard } from '../components/SceneCard';
 import { useAutomations } from '../hooks/useAutomations';
 import { HAEntity } from '../types';
 
 /**
- * Tela dedicada para Automações.
+ * Tela dedicada para Cenas.
  * Usa ScrollView + flexWrap para garantir scroll perfeito em Web e Mobile.
  */
-export function AutomationsScreen({ navigation }: any) {
-  const { filteredEntities, isLoading, search, setSearch, refresh } = useAutomations('Automations');
+export function ScenesScreen({ navigation }: any) {
+  const { filteredEntities, isLoading, search, setSearch, refresh } = useAutomations('Scenes');
 
   return (
     <View style={styles.container}>
@@ -32,7 +32,7 @@ export function AutomationsScreen({ navigation }: any) {
         >
           <Text style={styles.backText}>← Voltar</Text>
         </Pressable>
-        <Text style={styles.title}>Automações do Lar</Text>
+        <Text style={styles.title}>Cenas do Sistema</Text>
         <View style={styles.spacer} />
       </View>
 
@@ -40,14 +40,14 @@ export function AutomationsScreen({ navigation }: any) {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Pesquisar automações..."
+          placeholder="Pesquisar cenas..."
           placeholderTextColor="rgba(100,100,140,0.5)"
           value={search}
           onChangeText={setSearch}
         />
       </View>
 
-      {/* Lista de Automações — ScrollView + flexWrap funciona em Web e Mobile */}
+      {/* Lista de Cenas — ScrollView + flexWrap funciona em Web e Mobile */}
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -56,14 +56,14 @@ export function AutomationsScreen({ navigation }: any) {
       >
         <View style={styles.grid}>
           {(filteredEntities as HAEntity[]).map((item) => (
-            <AutomationEntityCard
+            <SceneCard
               key={item.entity_id}
               routine={item}
-              onRoutineDeleted={() => refresh()} // Recarrega instataneamente apos apagar
+              onRoutineDeleted={() => refresh()}
             />
           ))}
           {!isLoading && filteredEntities.length === 0 && (
-            <Text style={styles.emptyText}>Nenhuma automação encontrada.</Text>
+            <Text style={styles.emptyText}>Nenhuma cena encontrada.</Text>
           )}
         </View>
       </ScrollView>
